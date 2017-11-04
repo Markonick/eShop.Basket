@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eShop.Basket", "eShop.Baske
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{2570D2C7-FF8F-4B4B-872B-CD249CC49281}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eShop.Basket.UnitTests", "eShop.Basket.UnitTests\eShop.Basket.UnitTests.csproj", "{CA6FC6FF-94E3-484D-9796-C959FCBDA465}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eShop.Basket.IntegrationTests", "eShop.Basket.IntegrationTests\eShop.Basket.IntegrationTests.csproj", "{9D56A3E8-494A-4543-B84D-801A8950D1AE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{2570D2C7-FF8F-4B4B-872B-CD249CC49281}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2570D2C7-FF8F-4B4B-872B-CD249CC49281}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2570D2C7-FF8F-4B4B-872B-CD249CC49281}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA6FC6FF-94E3-484D-9796-C959FCBDA465}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA6FC6FF-94E3-484D-9796-C959FCBDA465}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA6FC6FF-94E3-484D-9796-C959FCBDA465}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA6FC6FF-94E3-484D-9796-C959FCBDA465}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D56A3E8-494A-4543-B84D-801A8950D1AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D56A3E8-494A-4543-B84D-801A8950D1AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D56A3E8-494A-4543-B84D-801A8950D1AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D56A3E8-494A-4543-B84D-801A8950D1AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
