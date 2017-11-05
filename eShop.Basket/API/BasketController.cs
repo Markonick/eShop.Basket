@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using eShop.Basket.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
@@ -31,30 +31,30 @@ namespace eShop.Basket.API
 
         // POST api/v1/basket/value
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]string value)
+        public async Task<IActionResult> Post([FromBody]string basket)
         {
-            var basket = await _repository.UpdateBasketAsync(value);
-            if (basket == null) return NotFound();
+            try
+            {
+                var result = await _repository.UpdateBasketAsync(basket);
+                if (result == null) return NotFound();
 
-            return Ok(basket);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.Debug(ex.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
         }
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/values/5
+        // DELETE /v1/basket/values/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-        }
-    }
+            var result = await _repository.DeleteBasketAsync(id);
+            if (result == null) return NotFound();
 
-    public interface IBasketRepository
-    {
-        Task<string> GetBasketAsync(int id);
-        Task<object> UpdateBasketAsync(string value);
+            return NoContent();
+        }
     }
 }

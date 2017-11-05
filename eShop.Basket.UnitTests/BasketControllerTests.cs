@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading.Tasks;
 using eShop.Basket.API;
+using eShop.Basket.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Serilog;
@@ -13,19 +14,20 @@ namespace eShop.Basket.UnitTests
     {
         private readonly BasketController _basketController;
         private readonly Mock<IBasketRepository> _repository;
-        private readonly Mock<ILogger> _logger;
 
-        public BasketControllerTests(Mock<ILogger> logger)
+        public BasketControllerTests()
         {
-            _logger = logger;
+            var logger = new Mock<ILogger>();
             _repository = new Mock<IBasketRepository>();
-            _basketController = new BasketController(_repository.Object, _logger.Object);
+            _basketController = new BasketController(_repository.Object, logger.Object);
         }
 
         [Fact]
         public async Task GetBasket_should_return_ok()
         {
             const int id = 1;
+            _repository.Setup(b => b.GetBasketAsync(id)).Returns(Task.FromResult("somestring"));
+
             var result = await _basketController.Get(id) as ObjectResult;
 
             Assert.NotNull(result);
@@ -36,7 +38,9 @@ namespace eShop.Basket.UnitTests
         public async Task GetBasket_should_return_notFound_when_id_not_found()
         {
             const int id = 1;
-            var result = await _basketController.Get(id) as ObjectResult;
+            _repository.Setup(b => b.GetBasketAsync(id)).Returns(Task.FromResult((string)null));
+
+            var result = await _basketController.Get(id) as NotFoundResult;
 
             Assert.NotNull(result);
             Assert.Equal(result.StatusCode, (int)HttpStatusCode.NotFound);
@@ -45,7 +49,9 @@ namespace eShop.Basket.UnitTests
         [Fact]
         public async Task PostBasket_should_update_basket_and_return_ok()
         {
-            var value = "";
+            const string value = "";
+            _repository.Setup(b => b.UpdateBasketAsync(value)).Returns(Task.FromResult(new object()));
+
             var result = await _basketController.Post(value) as ObjectResult;
 
             Assert.NotNull(result);
@@ -55,11 +61,25 @@ namespace eShop.Basket.UnitTests
         [Fact]
         public async Task PostBasket_should_return_notFound_when_id_not_found()
         {
-            var value = "";
-            var result = await _basketController.Post(value) as ObjectResult;
+            const string value = "";
+            _repository.Setup(b => b.UpdateBasketAsync(value)).Returns(Task.FromResult((object)null));
+
+            var result = await _basketController.Post(value) as NotFoundResult;
 
             Assert.NotNull(result);
             Assert.Equal(result.StatusCode, (int)HttpStatusCode.NotFound);
+        }
+
+        [Fact]
+        public async Task DeleteBasket_should_return_noContent()
+        {
+            const int id = 1;
+            _repository.Setup(b => b.DeleteBasketAsync(id)).Returns(Task.FromResult(new object()));
+
+            var result = await _basketController.Delete(id) as NoContentResult;
+
+            Assert.NotNull(result);
+            Assert.Equal(result.StatusCode, (int)HttpStatusCode.NoContent);
         }
     }
 }
