@@ -1,14 +1,22 @@
 ﻿using System.Threading.Tasks;
 using eShop.Basket.Domain;
 using Microsoft.AspNetCore.Mvc;
+using StackExchange.Redis;
 
 namespace eShop.Basket.Infrastructure
 {
     public class BasketRepository : IBasketRepository
     {
-        public Task<string> GetBasketAsync(int id)
+        private IDatabase _db;
+
+        public BasketRepository(ConnectionMultiplexer redis)
         {
-            throw new System.NotImplementedException();
+            _db = redis.GetDatabase();
+        }
+
+        public async Task<string> GetBasketAsync(string customerId)
+        {
+            var basket = await _db.StringGetAsync(customerId);
         }
 
         public Task<object> UpdateBasketAsync(string value)

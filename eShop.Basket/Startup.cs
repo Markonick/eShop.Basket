@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using eShop.Basket.Domain;
+using eShop.Basket.Infrastructure;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using StackExchange.Redis;
 using Serilog;
 using Serilog.Events;
 using ILogger = Serilog.ILogger;
@@ -22,6 +25,9 @@ namespace eShop.Basket
         public void ConfigureServices(IServiceCollection services) 
         {
             services.AddMvc();
+
+            //Add Redis
+            services.AddSingleton(redis => ConnectionMultiplexer.Connect(Configuration["ConnectionString"]));
 
             // Add framework services.
             services.AddSwaggerGen(options =>
@@ -45,8 +51,8 @@ namespace eShop.Basket
                         .AllowCredentials());
             });
 
-            var logger = ConfigureLogger();
-            services.AddSingleton<ILogger>(logger);
+            services.AddSingleton<IBasketRepository, BasketRepository>();
+            services.AddSingleton<ILogger>(log=>ConfigureLogger());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
