@@ -21,7 +21,7 @@ namespace eShop.Basket.API
 
         // GET api/v1/basket/id
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(string id)
         {
             var basket = await _repository.GetBasketAsync(id);
             if (basket == null) return NotFound();
@@ -49,7 +49,7 @@ namespace eShop.Basket.API
 
         // DELETE /v1/basket/values/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(string id)
         {
             var result = await _repository.DeleteBasketAsync(id);
             if (result == null) return NotFound();

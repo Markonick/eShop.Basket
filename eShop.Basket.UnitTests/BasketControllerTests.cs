@@ -25,8 +25,8 @@ namespace eShop.Basket.UnitTests
         [Fact]
         public async Task GetBasket_should_return_ok()
         {
-            const int id = 1;
-            _repository.Setup(b => b.GetBasketAsync(id)).Returns(Task.FromResult("somestring"));
+            const string id = "someid";
+            _repository.Setup(b => b.GetBasketAsync(id)).Returns(Task.FromResult((new CustomerBasket(id))));
 
             var result = await _basketController.Get(id) as ObjectResult;
 
@@ -37,8 +37,8 @@ namespace eShop.Basket.UnitTests
         [Fact]
         public async Task GetBasket_should_return_notFound_when_id_not_found()
         {
-            const int id = 1;
-            _repository.Setup(b => b.GetBasketAsync(id)).Returns(Task.FromResult((string)null));
+            const string id = "someid";
+            _repository.Setup(b => b.GetBasketAsync(id)).Returns(Task.FromResult((CustomerBasket)null));
 
             var result = await _basketController.Get(id) as NotFoundResult;
 
