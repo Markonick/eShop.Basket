@@ -36,9 +36,38 @@ namespace eShop.Basket.Infrastructure
             }
         }
 
-        public Task<object> UpdateBasketAsync(string value)
+        public async Task<CustomerBasket> AddItemToBasketAsync(BasketItem item, string customerId)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                //Get the basket for this customer
+                var basket = await _db.StringGetAsync(customerId);
+                if (basket.IsNullOrEmpty) return null;
+                var result = JsonConvert.DeserializeObject<CustomerBasket>(basket);
+
+                //Now add item to basket
+                result.Items.Add(item);
+
+                //Update basket
+                var updated = await _db.StringSetAsync(key: customerId, value: JsonConvert.SerializeObject(result));
+                if (updated.Equals(false))
+                {
+                    _logger.Debug("Basket wasn't updated into Redis");
+                    return null;
+                }
+
+                return await GetBasketAsync(customerId);
+            }
+            catch (Exception ex)
+            {
+                _logger.Debug(ex.Message);
+                throw;
+            }
+        }
+
+        public Task<CustomerBasket> DeleteItemToBasketAsync(BasketItem item, string customerId)
+        {
+            throw new NotImplementedException();
         }
 
         public Task<object> DeleteBasketAsync(string id)

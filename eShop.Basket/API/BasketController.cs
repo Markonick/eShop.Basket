@@ -21,6 +21,8 @@ namespace eShop.Basket.API
 
         // GET api/v1/basket/id
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(CustomerBasket), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(CustomerBasket), (int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> Get(string id)
         {
             var basket = await _repository.GetBasketAsync(id);
@@ -29,13 +31,16 @@ namespace eShop.Basket.API
             return Ok(basket);
         }
 
-        // POST api/v1/basket/value
+        // POST api/v1/basket
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]string basket)
+        [ProducesResponseType(typeof(CustomerBasket), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(CustomerBasket), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(CustomerBasket), (int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> Post([FromBody]BasketItem item, string customerId)
         {
             try
             {
-                var result = await _repository.UpdateBasketAsync(basket);
+                var result = await _repository.AddItemToBasketAsync(item, customerId);
                 if (result == null) return NotFound();
 
                 return Ok(result);
@@ -47,8 +52,10 @@ namespace eShop.Basket.API
             }
         }
 
-        // DELETE /v1/basket/values/5
+        // DELETE /v1/basket/5
         [HttpDelete("{id}")]
+        [ProducesResponseType(typeof(CustomerBasket), (int)HttpStatusCode.NoContent)]
+        [ProducesResponseType(typeof(CustomerBasket), (int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> Delete(string id)
         {
             var result = await _repository.DeleteBasketAsync(id);

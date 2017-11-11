@@ -25,10 +25,10 @@ namespace eShop.Basket.UnitTests
         [Fact]
         public async Task GetBasket_should_return_ok()
         {
-            const string id = "someid";
-            _repository.Setup(b => b.GetBasketAsync(id)).Returns(Task.FromResult((new CustomerBasket(id))));
+            const string customerId = "somecustomerid";
+            _repository.Setup(b => b.GetBasketAsync(customerId)).Returns(Task.FromResult((new CustomerBasket(customerId))));
 
-            var result = await _basketController.Get(id) as ObjectResult;
+            var result = await _basketController.Get(customerId) as ObjectResult;
 
             Assert.NotNull(result);
             Assert.Equal(result.StatusCode, (int)HttpStatusCode.OK);
@@ -37,10 +37,10 @@ namespace eShop.Basket.UnitTests
         [Fact]
         public async Task GetBasket_should_return_notFound_when_id_not_found()
         {
-            const string id = "someid";
-            _repository.Setup(b => b.GetBasketAsync(id)).Returns(Task.FromResult((CustomerBasket)null));
+            const string customerId = "somecustomerid";
+            _repository.Setup(b => b.GetBasketAsync(customerId)).Returns(Task.FromResult((CustomerBasket)null));
 
-            var result = await _basketController.Get(id) as NotFoundResult;
+            var result = await _basketController.Get(customerId) as NotFoundResult;
 
             Assert.NotNull(result);
             Assert.Equal(result.StatusCode, (int)HttpStatusCode.NotFound);
@@ -49,10 +49,14 @@ namespace eShop.Basket.UnitTests
         [Fact]
         public async Task PostBasket_should_update_basket_and_return_ok()
         {
-            const string value = "";
-            _repository.Setup(b => b.UpdateBasketAsync(value)).Returns(Task.FromResult(new object()));
+            var item = new BasketItem()
+            {
 
-            var result = await _basketController.Post(value) as ObjectResult;
+            };
+            const string customerId = "somecustomerid";
+            _repository.Setup(b => b.AddItemToBasketAsync(item, customerId)).Returns(Task.FromResult(new CustomerBasket(customerId)));
+
+            var result = await _basketController.Post(item, customerId) as ObjectResult;
 
             Assert.NotNull(result);
             Assert.Equal(result.StatusCode, (int)HttpStatusCode.OK);
@@ -61,10 +65,14 @@ namespace eShop.Basket.UnitTests
         [Fact]
         public async Task PostBasket_should_return_notFound_when_id_not_found()
         {
-            const string value = "";
-            _repository.Setup(b => b.UpdateBasketAsync(value)).Returns(Task.FromResult((object)null));
+            var item = new BasketItem()
+            {
 
-            var result = await _basketController.Post(value) as NotFoundResult;
+            };
+            const string customerId = "somecustomerid";
+            _repository.Setup(b => b.AddItemToBasketAsync(item, customerId)).Returns(Task.FromResult((CustomerBasket)null));
+
+            var result = await _basketController.Post(item, customerId) as NotFoundResult;
 
             Assert.NotNull(result);
             Assert.Equal(result.StatusCode, (int)HttpStatusCode.NotFound);
@@ -73,7 +81,7 @@ namespace eShop.Basket.UnitTests
         [Fact]
         public async Task DeleteBasket_should_return_noContent()
         {
-            const int id = 1;
+            const string id = "1";
             _repository.Setup(b => b.DeleteBasketAsync(id)).Returns(Task.FromResult(new object()));
 
             var result = await _basketController.Delete(id) as NoContentResult;
