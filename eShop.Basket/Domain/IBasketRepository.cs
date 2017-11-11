@@ -7,8 +7,8 @@ namespace eShop.Basket.Domain
     public interface IBasketRepository
     {
         Task<CustomerBasket> GetBasketAsync(string customerId);
-        Task<CustomerBasket> AddItemToBasketAsync(BasketItem item, string customerId);
-        Task<CustomerBasket> DeleteItemToBasketAsync(BasketItem item, string customerId);
-        Task<object> DeleteBasketAsync(string customerId);
+        Task<CustomerBasket> UpdateBasketAsync(CustomerBasket basket);
+        Task<CustomerBasket> DeleteItemToBasketAsync(CustomerBasket basket);
+        Task<bool> DeleteBasketAsync(string customerId);
     }
 }

@@ -47,14 +47,14 @@ namespace eShop.Basket.UnitTests
         }
 
         [Fact]
-        public async Task PostBasket_should_update_basket_and_return_ok()
+        public async Task AddItemToBasket_should_update_basket_and_return_ok()
         {
             var item = new BasketItem()
             {
 
             };
             const string customerId = "somecustomerid";
-            _repository.Setup(b => b.AddItemToBasketAsync(item, customerId)).Returns(Task.FromResult(new CustomerBasket(customerId)));
+            _repository.Setup(b => b.UpdateBasketAsync(item, customerId)).Returns(Task.FromResult(new CustomerBasket(customerId)));
 
             var result = await _basketController.Post(item, customerId) as ObjectResult;
 
@@ -70,7 +70,7 @@ namespace eShop.Basket.UnitTests
 
             };
             const string customerId = "somecustomerid";
-            _repository.Setup(b => b.AddItemToBasketAsync(item, customerId)).Returns(Task.FromResult((CustomerBasket)null));
+            _repository.Setup(b => b.UpdateBasketAsync(item, customerId)).Returns(Task.FromResult((CustomerBasket)null));
 
             var result = await _basketController.Post(item, customerId) as NotFoundResult;
 

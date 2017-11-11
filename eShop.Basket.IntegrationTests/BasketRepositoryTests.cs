@@ -29,7 +29,7 @@ namespace eShop.Basket.IntegrationTests
         {
             var item = new BasketItem { };
             const string customerId = "customerId";
-            await _repository.AddItemToBasketAsync(item, customerId);
+            await _repository.UpdateBasketAsync(item, customerId);
 
             const string id = "one";
             var basket = await _repository.GetBasketAsync(id);
@@ -43,7 +43,7 @@ namespace eShop.Basket.IntegrationTests
         {
             var item = new BasketItem { };
             const string customerId = "customerId";
-            var basket = await _repository.AddItemToBasketAsync(item, customerId);
+            var basket = await _repository.UpdateBasketAsync(item, customerId);
 
             Assert.NotNull(basket);
             Assert.Single(basket.Items);

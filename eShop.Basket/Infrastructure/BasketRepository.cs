@@ -36,7 +36,7 @@ namespace eShop.Basket.Infrastructure
             }
         }
 
-        public async Task<CustomerBasket> AddItemToBasketAsync(BasketItem item, string customerId)
+        public async Task<CustomerBasket> UpdateBasketAsync(BasketItem item, string customerId)
         {
             try
             {
@@ -70,9 +70,10 @@ namespace eShop.Basket.Infrastructure
             throw new NotImplementedException();
         }
 
-        public Task<object> DeleteBasketAsync(string id)
+        public async Task<bool> DeleteBasketAsync(string customerId)
         {
-            throw new System.NotImplementedException();
+            return await _db.KeyDeleteAsync(customerId);
+
         }
     }
 }

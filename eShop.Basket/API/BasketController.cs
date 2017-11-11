@@ -36,11 +36,11 @@ namespace eShop.Basket.API
         [ProducesResponseType(typeof(CustomerBasket), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(CustomerBasket), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(CustomerBasket), (int)HttpStatusCode.InternalServerError)]
-        public async Task<IActionResult> Post([FromBody]BasketItem item, string customerId)
+        public async Task<IActionResult> Post([FromBody]CustomerBasket basket)
         {
             try
             {
-                var result = await _repository.AddItemToBasketAsync(item, customerId);
+                var result = await _repository.UpdateBasketAsync(basket);
                 if (result == null) return NotFound();
 
                 return Ok(result);
@@ -56,9 +56,9 @@ namespace eShop.Basket.API
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(CustomerBasket), (int)HttpStatusCode.NoContent)]
         [ProducesResponseType(typeof(CustomerBasket), (int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(string customerId)
         {
-            var result = await _repository.DeleteBasketAsync(id);
+            var result = await _repository.DeleteBasketAsync(customerId);
             if (result == null) return NotFound();
 
             return NoContent();
